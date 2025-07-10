@@ -19,6 +19,7 @@ export default function RegisterPage()
         }
         function SendForm(e)
         {   
+            e.preventDefault();
             router.post('/register', {
                 
                 email: values.email,
@@ -35,7 +36,7 @@ export default function RegisterPage()
             
         </head>
 
-        <body>
+       
             <nav className="lg:mt-0 mt-10">
                 <h1 className="font-bold text-2xl lg:p-5 lg:justify-self-start justify-self-center">S-Ask</h1>
             </nav>
@@ -66,7 +67,7 @@ export default function RegisterPage()
                     </div>
                 </div>
             </form>
-        </body>        
+               
         </>
   )
 }

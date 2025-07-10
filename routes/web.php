@@ -6,6 +6,7 @@ use App\Http\Middleware\GuestChecker;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/',[PromptController::class,'PromptPage'])->name('PromptPage');
+Route::post('/',[PromptController::class,'SendPrompt'])->name('SendPrompt');
 
 Route::middleware([GuestChecker::class])->group (function(){
     Route::get('/login',[UserController::class,'LoginPage'])->name('LoginPage');

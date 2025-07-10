@@ -6,12 +6,14 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
+
 
 class UserController extends Controller
 {
     public function LoginPage()
     {
-        return inertia('Login');
+        return Inertia::render('Login');
     }
     
     public function Login(Request $request)
@@ -20,11 +22,12 @@ class UserController extends Controller
         if(Auth::attempt($cek))
         {
             $request->session()->regenerate();
-            return to_route('PromptPage');
+            
+            return redirect()->route('PromptPage');
         }
         else
         {
-                
+            return "ERROR";
         }
         
         
@@ -46,6 +49,6 @@ class UserController extends Controller
         $new_user->password = bcrypt($request->password);
         $new_user->save();
 
-        return to_route('LoginPage');
+        return redirect()->route('LoginPage');
     }
 }

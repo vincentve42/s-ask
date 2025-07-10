@@ -1,4 +1,4 @@
-import { router } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import { useState } from "react";
 import Disclaimer from './disclamer';
 export default function SendPrompt()
@@ -6,6 +6,7 @@ export default function SendPrompt()
     const [values, setValues] = useState({
         prompt : ""
     })
+    const {errors} = usePage().props;
     function IsiBerubah(e)
     {
             const key = e.target.id;
@@ -17,9 +18,10 @@ export default function SendPrompt()
     }
     function SendForm(e)
     {
-        e.preventDefault();
-        
-        router.post('/');
+        e.preventDefault()
+        router.post('/',{
+            prompt: values.prompt,
+        });
     }
     function OnFirstClick()
     {
@@ -27,9 +29,14 @@ export default function SendPrompt()
     }
     return (
         <>
-        <form onSubmit={SendForm} className="justify-self-center shadow-xs lg:mt-200 mt-130">
-            <input id="prompt" placeholder="Ask here" type="text" className="mt-5 lg:rounded-4xl border border-gray-300 rounded-4xl lg:p-3 p-2 focus:rounded-4xl lg:w-128 focus:border-gray-300 w-96"/>
-            <input type="submit" className="hidden"/>
+        <form onSubmit={SendForm} className="justify-self-center shadow-xs fixed lg:top-200 top-140">
+            <input id="prompt" placeholder="Ask here" type="text" value={values.prompt} onChange={IsiBerubah} className="mt-5 lg:rounded-4xl border border-gray-300 rounded-4xl lg:p-3 p-2 focus:rounded-4xl lg:w-128 focus:border-gray-300 w-96"/>
+            {
+                <ul>
+                    <li>{errors.prompt}</li>
+                </ul>
+            }
+            <input type="submit" name="" className="hidden" />
         </form>
         
         </>

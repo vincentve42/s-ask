@@ -4,6 +4,7 @@ import { useState } from "react";
 export default function LoginPage()
 {
     const props = usePage.props;
+    const error = usePage.props;
     const [values, setValues] = useState({
         email : "",
         password : ""
@@ -21,15 +22,15 @@ export default function LoginPage()
     }
     function SendForm(e)
     {
-        router.post('/login',values);
+        e.preventDefault();
+        router.post('/login',{
+            email : values.email,
+            password : values.password
+        });
     }
     return (
         <>
-        <head>
-            
-        </head>
-
-        <body>
+       
             <nav className="lg:mt-0 mt-10">
                 <h1 className="font-bold text-2xl lg:p-5 lg:justify-self-start justify-self-center">S-Ask</h1>
             </nav>
@@ -44,6 +45,7 @@ export default function LoginPage()
                     <div className="justify-self-center">
                         <input type="password" placeholder="Password" id="password"  value={values.password} onChange={DataBerubah} className="mt-5 p-2 pl-4 rounded-4xl focus:rounded-4xl border hover:border-blue-500 focus:border-blue-500 lg:w-82"/>
                     </div>
+                     
                     <div className="justify-self-center lg:w-82 w-52 lg:mt-5 mt-5 ">
                         <button type="submit" className="text-center lg:w-82 w-52 bg-black rounded-4xl text-white p-4 w-full">Continue</button>
                     </div>
@@ -53,7 +55,7 @@ export default function LoginPage()
                     </div>
                 </div>
             </form>
-        </body>        
+           
         </>
     )
 }

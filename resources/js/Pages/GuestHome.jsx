@@ -5,16 +5,19 @@ import Disclamer from './home-component/disclamer';
 
 export default function GuestHome()
 {
+    
     return(
         <>
-        <head>
-            
-        </head>
-        <body>
+        
+        
             
             <GuestNavbar></GuestNavbar>
             <div>
-                <Logo></Logo>
+                <div>
+                   
+                       
+                    
+                </div>
             </div>
             <div>
 
@@ -22,7 +25,7 @@ export default function GuestHome()
                 <SendPrompt></SendPrompt>
                 <Disclamer/>
             </div>
-        </body>
+        
         </>
     )
 }

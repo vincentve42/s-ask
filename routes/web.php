@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PromptController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\AuthChecker;
 use App\Http\Middleware\GuestChecker;
 use Illuminate\Support\Facades\Route;
 
@@ -15,3 +16,6 @@ Route::middleware([GuestChecker::class])->group (function(){
     Route::post('/register',[UserController::class,'Register'])->name('Register');
 });
 
+Route::middleware([AuthChecker::class])->group(function (){
+    Route::post('/chat',[PromptController::class,'ViewPrompt'])->name('ViewPrompt');
+});

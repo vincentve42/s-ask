@@ -13,7 +13,30 @@ use Inertia\Inertia;
 
 class PromptController extends Controller
 {
-    
+    public function ViewPrompt(Request $request)
+    {
+       if($request-> chat == 0)
+       {
+             session()->put('firsttimeuse',0);
+             session()->put('chat-id',$request->chat);
+       }
+        else
+        {
+            try
+            {
+                $cek = Auth::user()->prompt_chat->find($request->chat);
+                session()->put('chat-id',$request->chat);
+                return redirect()->route('PromptPage');
+
+            }
+            catch(Exception $e)
+            {
+                return dd($e);
+            }
+        }
+        
+        
+    }
     public function PromptPage()
     {
         if(!Auth::user())
@@ -27,14 +50,12 @@ class PromptController extends Controller
             if(!$pageid)
             {
                 
-                 return Inertia::render('DefaultHome');
+                 return Inertia::render('DefaultHome', ['chat' => Auth::user()->prompt_chat]);
             }
             else
             {
                 $id_page = chat::where('prompt_chat_id',$pageid)->get();
-                
-
-                return Inertia::render('DefaultHome',['data' => $id_page]);            
+                return Inertia::render('DefaultHome',['data' => $id_page, 'chat' => Auth::user()->prompt_chat()->orderBy('id','desc')->get()]);            
             }
             
             
@@ -59,22 +80,24 @@ class PromptController extends Controller
                 $prompt_new_chat = new prompt_chat;
                 $prompt_new_chat->judul = $request->prompt;
                 $prompt_new_chat->user()->associate(Auth::user()->id);
+                $prompt_new_chat->save();
                 
                 
                 try
                 {
+                    
+                  
                     $prompt_new_chat->save();
-                    try{
-                            $prompt = new chat;
-                            $prompt->prompt=$request->prompt;
-                            $prompt_new_chat->response = 'Testing aja gapunya api bayar jir ternyata tapi udah ampir selesai guabuatnya bangke';
-                            $prompt->save();
-                            session()->put('chat-id',$prompt_new_chat->id);
-                        }
-                        catch(Exception $e)
-                        {
-                            return dd($e);
-                        }
+                    session()->put('chat-id',$prompt_new_chat->id);
+                    $prompt = new chat;
+                    $prompt->prompt=$request->prompt;
+                            
+                    $prompt->response='Testing';
+                    $prompt->prompt_chat()->associate($prompt_new_chat->id);
+                    $prompt->save();
+                            
+                        
+                        
                 }
                 catch(Exception $e)
                 {
@@ -85,37 +108,34 @@ class PromptController extends Controller
             {
                 if($cek_pertama_kali == 0)
                 {
-                    session()->put('firsttimeuse', 1);
-                    
                     $prompt_new_chat = new prompt_chat;
                     $prompt_new_chat->judul = $request->prompt;
                     $prompt_new_chat->user()->associate(Auth::user()->id);
+                    $prompt_new_chat->save();
                     
                     
                     try
                     {
+                        
+                    
                         $prompt_new_chat->save();
                         session()->put('chat-id',$prompt_new_chat->id);
                         $prompt = new chat;
                         $prompt->prompt=$request->prompt;
-                        
-                        $prompt->response='';
+                                
+                        $prompt->response='Testing';
                         $prompt->prompt_chat()->associate($prompt_new_chat->id);
-                        try{
+                        $prompt->save();
+                                
                             
-                            $prompt->save();
                             
-                        }
-                        catch(Exception $e)
-                        {
-                            return dd($e);
-                        }
                     }
                     catch(Exception $e)
                     {
                         return dd($e);
                     }
                 }
+                
                 if($cek_pertama_kali == 1)
                 {
                     $id = session()->get('chat-id');

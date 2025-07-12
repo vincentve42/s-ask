@@ -13,6 +13,11 @@ use Inertia\Inertia;
 
 class PromptController extends Controller
 {
+    public function Logout()
+    {
+        Auth::logout();
+        return redirect()->back();
+    }
     public function ViewPrompt(Request $request)
     {
        if($request-> chat == 0)
@@ -41,8 +46,15 @@ class PromptController extends Controller
     {
         if(!Auth::user())
         {
+            $cek = session()->get("temp_prompt");
             
-            return Inertia::render('GuestHome',[]);
+            
+            
+            
+            
+            return Inertia::render('GuestHome',['data' => session("temp_prompt")]);
+        
+            
         }
         else
         {
@@ -162,14 +174,16 @@ class PromptController extends Controller
         else
         {
         
-            $guest_response = session()->get('guest');
+            $guest_response = session()->get('temp_prompt'); 
 
-            if(!$guest_response)
-            {
-                $guest_response = array(
-                    'prompt'
-                );
-            }
+            $guest_response[] = [ // Tambah data baru
+                'prompt' => $request->prompt,
+                'response' => 'test',
+            ];
+
+            session()->put('temp_prompt', $guest_response); // Simpan ulang
+            return redirect()->route('PromptPage');
         }
+        
     }
 }

@@ -29,7 +29,7 @@ export default function SendPrompt()
     }
     return (
         <>
-        <form onSubmit={SendForm} className="justify-self-center shadow-xs static lg:top-200 top-150">
+        <form onSubmit={SendForm} className="justify-self-center shadow-xs static lg:pt-5 pt-20 ">
             <input id="prompt" placeholder="Ask here" type="text" value={values.prompt} onChange={IsiBerubah} className="mt-5 lg:rounded-4xl border border-gray-300 rounded-4xl lg:p-3 p-2 focus:rounded-4xl lg:w-128 focus:border-gray-300 w-96"/>
             {
                 <ul>
